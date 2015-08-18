@@ -1,0 +1,6 @@
+<% if @config.log_dir %>
+LOGDIR=<%= @config.log_dir %>
+<% end %>
+<% if @config.mesos_ulimit %>
+ULIMIT="-n <%= @config.mesos_ulimit %>"
+<% end %>
