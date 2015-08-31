@@ -61,7 +61,7 @@ module MesosCookbook
 
       # @!attribute type
       # @return [String]
-      attribute(:type, equal_to: %w{master slave}, default: nil)
+      attribute(:type, equal_to: %w{master slave standalone}, default: nil)
 
       # @!attribute zk
       # @return [String]
@@ -139,7 +139,7 @@ module MesosCookbook
           end
 
           # Mesos master specific settings
-          if new_resource.type == 'master'
+          if new_resource.type == 'master' || new_resource.type == 'standalone'
             %w{cluster quorum}.each do |c|
               template "#{new_resource.instance} :create #{new_resource.config_dir_master}/#{c}" do
                 cookbook new_resource.cookbook
@@ -167,11 +167,12 @@ module MesosCookbook
               )
             end
 
-            execute 'slave_off' do
-              command 'echo manual >> /etc/init/mesos-slave.override'
+            unless new_resource.type == 'standalone'
+              execute 'slave_off' do
+                command 'echo manual >> /etc/init/mesos-slave.override'
+              end
             end
-
-          elsif new_resource.type == 'slave'
+          elsif new_resource.type == 'slave' || new_resource.type == 'standalone'
             template "#{new_resource.instance} :create #{config_dir_os}/mesos-slave" do
               cookbook new_resource.cookbook
               path "#{config_dir_os}/mesos-slave"
@@ -181,8 +182,10 @@ module MesosCookbook
               variables(config: new_resource)
             end
 
-            execute 'master_off' do
-              command 'echo manual >> /etc/init/mesos-master.override'
+            unless new_resource.type == 'standalone'
+              execute 'master_off' do
+                command 'echo manual >> /etc/init/mesos-master.override'
+              end
             end
           end
           create_additional_options
