@@ -5,12 +5,12 @@ module MesosCookbook
     def package_install
       case node.platform
       when 'ubuntu'
-#        bash 'add an apt trusted key for mesosphere' do
-#          code <<-EOH
-#            apt-key adv --keyserver keyserver.ubuntu.com --recv E56151BF
-#          EOH
-#          action :run
-#        end
+        bash 'add an apt trusted key for mesosphere' do
+          code <<-EOH
+            apt-key adv --keyserver keyserver.ubuntu.com --recv E56151BF
+          EOH
+          action :run
+        end
 
         bash 'add mesosphere repository' do
           code <<-EOH
