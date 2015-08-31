@@ -93,7 +93,7 @@ module MesosCookbook
         new_resource.additional_options.each do |k, v|
           file "#{new_resource.instance} :create #{type_dir})/#{k}" do
             path "#{type_dir}/#{k}"
-            content "#{v}"
+            content v
           end
         end
       end
@@ -162,10 +162,9 @@ module MesosCookbook
               )
             end
 
-            unless new_resource.type == 'standalone'
-              execute 'slave_off' do
-                command 'echo manual >> /etc/init/mesos-slave.override'
-              end
+            execute 'slave_off' do
+              command 'echo manual >> /etc/init/mesos-slave.override'
+              only_if { new_resource.type != 'standalone' }
             end
           elsif new_resource.type == 'slave' || new_resource.type == 'standalone'
             template "#{new_resource.instance} :create #{config_dir_os}/mesos-slave" do
@@ -177,10 +176,9 @@ module MesosCookbook
               variables(config: new_resource)
             end
 
-            unless new_resource.type == 'standalone'
-              execute 'master_off' do
-                command 'echo manual >> /etc/init/mesos-master.override'
-              end
+            execute 'master_off' do
+              command 'echo manual >> /etc/init/mesos-master.override'
+              only_if { new_resource.type != 'standalone' }
             end
           end
           create_additional_options
