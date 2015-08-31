@@ -1,7 +1,6 @@
 <% if @config.type == 'master' %>
-<% if @config.port %>
-PORT=<%= @config.port %>
+<% if @port %>
+PORT=<%= @port %>
 <% end %>
 ZK="-n <%= @config.mesos_ulimit %>"
-<% end %>
 <% end %>

@@ -1,0 +1,16 @@
+DEPENDENCIES
+  mesos
+    path: .
+    metadata: true
+  mesos-instance-test
+    path: test/fixtures/cookbooks/mesos-instance-test
+
+GRAPH
+  mesos (1.0.0)
+    poise (~> 2.0)
+    poise-service (~> 1.0)
+  mesos-instance-test (0.0.1)
+    mesos (>= 0.0.0)
+  poise (2.2.3)
+  poise-service (1.0.1)
+    poise (~> 2.0)
