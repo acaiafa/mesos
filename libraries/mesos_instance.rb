@@ -76,7 +76,6 @@ module MesosCookbook
       # @return [Hash]
       # This will be for all of the additional mesos settings that can be apart of the master or the slave
       attribute(:additional_options, option_collector: true)
-
     end
   end
 
@@ -88,15 +87,21 @@ module MesosCookbook
       include PoiseService::ServiceMixin
       include MesosCookbook::Helpers
 
+      # Method for creating config files for additional options
+      def create_additional_options
+        type_dir = new_resource.send('config_dir_' + new_resource.type)
+        new_resource.additional_options.each do |k, v|
+          file "#{new_resource.instance} :create #{type_dir})/#{k}" do
+            path "#{type_dir}/#{k}"
+            content "#{v}"
+          end
+        end
+      end
+
       def action_enable
         notifying_block do
+          # Install package through helper library here
           package_install
-          package new_resource.package_name do
-            options "--no-install-recommends"
-            version new_resource.package_version unless new_resource.package_version.nil?
-            action :upgrade
-            only_if { new_resource.install_method == 'package' }
-          end
 
           [new_resource.config_dir, new_resource.config_dir_master, new_resource.config_dir_slave].each do |dir|
             directory "#{new_resource.instance} :create #{dir}" do
@@ -126,16 +131,6 @@ module MesosCookbook
               log_dir: new_resource.log_dir,
               mesos_ulimit: new_resource.mesos_ulimit
             )
-          end
-
-          def create_additional_options
-            type_dir = new_resource.send('config_dir_' + new_resource.type) 
-            new_resource.additional_options.each do |k,v|
-              file "#{new_resource.instance} :create #{type_dir})/#{k}" do
-                path "#{type_dir}/#{k}"
-                content "#{v}"
-              end
-            end
           end
 
           # Mesos master specific settings
