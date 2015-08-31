@@ -5,19 +5,19 @@ module MesosCookbook
     def package_install
       case node.platform
       when 'ubuntu'
-        bash 'add an apt trusted key for mesosphere' do
-          code <<-EOH
-          apt-key adv --keyserver keyserver.ubuntu.com --recv E56151BF
-          EOH
-          action :run
-        end
+#        bash 'add an apt trusted key for mesosphere' do
+#          code <<-EOH
+#            apt-key adv --keyserver keyserver.ubuntu.com --recv E56151BF
+#          EOH
+#          action :run
+#        end
 
         bash 'add mesosphere repository' do
           code <<-EOH
-          DISTRO=$(lsb_release -is | tr '[:upper:]' '[:lower:]')
-          CODENAME=$(lsb_release -cs)
-          echo "deb http://repos.mesosphere.io/${DISTRO} ${CODENAME} main" | sudo tee /etc/apt/sources.list.d/mesosphere.list
-          sudo apt-get -y update
+            DISTRO=$(lsb_release -is | tr '[:upper:]' '[:lower:]')
+            CODENAME=$(lsb_release -cs)
+            echo "deb http://repos.mesosphere.io/${DISTRO} ${CODENAME} main" | sudo tee /etc/apt/sources.list.d/mesosphere.list
+            sudo apt-get -y update
           EOH
           action :run
         end
@@ -37,7 +37,7 @@ module MesosCookbook
 
         bash 'add mesosphere repository' do
           code <<-EOH
-          rpm -Uvh #{repo_url} || true
+            rpm -Uvh #{repo_url} || true
           EOH
           action :run
         end

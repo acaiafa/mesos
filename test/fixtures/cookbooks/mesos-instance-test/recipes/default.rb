@@ -3,10 +3,10 @@ mesos_instance "testing" do
   listen "127.0.0.1"
   port 5000
   quorum 1
-  zk "zk:///whatitdo"
+  zk "zk:///127.0.0.1"
   additional_options do
-    something "something else"
-    something2 "something else2"
+    example "example"
+    example2 "example2"
   end
 end
 
