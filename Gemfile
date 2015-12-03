@@ -1,8 +1,12 @@
 source 'https://rubygems.org'
+gem 'poise', '~> 2.2'
+gem 'poise-service', '~> 1.0'
+gem 'poise-boiler'
+gem 'toml'
 
 group :lint do
   gem 'rubocop'
-  gem 'foodcritic', git: 'https://github.com/acrmp/foodcritic'
+  gem 'foodcritic'
 end
 
 group :kitchen_common do
@@ -27,7 +31,7 @@ group :integration do
 end
 
 group :development do
-  gem 'guard'
+  gem 'awesome_print'
   gem 'guard-kitchen'
   gem 'guard-rspec'
   gem 'guard-rubocop'
