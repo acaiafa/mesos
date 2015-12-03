@@ -5,6 +5,7 @@ AllCops:
     - 'test/**/*'
     - 'bin/**'
     - 'vendor/**/*'
+    - 'Vagrantfile'
 AlignParameters:
   Enabled: false
 ClassLength:
